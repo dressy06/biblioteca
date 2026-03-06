@@ -495,6 +495,24 @@
     <a href="https://arquivoblush.com/">Arquivoblush</a> — Biblioteca
   </div>
 
+  <!-- LOGIN POPUP -->
+  <div class="pw-modal" id="loginModal">
+    <div class="pw-box">
+      <button class="pw-box-close" onclick="closeLogin()">[ x ]</button>
+      <div class="pw-box-title">Biblioteca</div>
+      <p style="font-size:10px;font-weight:300;font-style:italic;color:var(--ar-t3);margin-bottom:18px;">Entre para gerenciar o acervo, ou feche para navegar.</p>
+      <div class="fg">
+        <label>Senha</label>
+        <input type="password" class="plain" id="loginInput" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="form-actions">
+        <button class="btn" onclick="doLogin()">Entrar</button>
+        <button class="btn btn-ghost" onclick="closeLogin()">Só navegar</button>
+      </div>
+      <p id="loginErr" class="saving-msg err" style="display:none">Senha incorreta.</p>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
 
 <script>
@@ -816,7 +834,27 @@ function renderStats() {
   w.innerHTML = h;
 }
 
+function doLogin() {
+  const pw = document.getElementById('loginInput').value;
+  if (pw === CONFIG.PASSWORD) {
+    unlocked = true;
+    closeLogin();
+    // also unlock the catalogar form if visible
+    document.getElementById('pwGate').style.display = 'none';
+    document.getElementById('catForm').style.display = 'block';
+    toast('Bem-vinda');
+  } else {
+    document.getElementById('loginErr').style.display = 'block';
+  }
+}
+function closeLogin() {
+  document.getElementById('loginModal').classList.remove('show');
+}
+
 loadBooks();
+// show login popup on load
+document.getElementById('loginModal').classList.add('show');
+setTimeout(() => document.getElementById('loginInput').focus(), 100);
 </script>
 </body>
 </html>
